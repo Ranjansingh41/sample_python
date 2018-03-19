@@ -1,14 +1,8 @@
-class App():
-    def __init__(self):
-        self.var1 = 15
+num1 = 10
+num2 = 20
 
-    def calculate(self):
-        self.result = self.var1 * 4 + 2
+# Add two numbers
+sum = float(num1) + float(num2)
 
-    def retrieve(self):
-        return self.result
-
-if __name__ == "__main__":
-    app = App()
-    app.calculate()
-    print(app.retrieve)
+# Display the sum
+print('The sum of {0} and {1} is {2}'.format(num1, num2, sum))
