@@ -1,7 +1,7 @@
 language: python
   
 build:
-  pre_ci:
-    - echo "this is pr-ci1"
+ 
   ci:
     - echo "printing env 123"
+    - python app.py
