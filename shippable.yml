@@ -5,3 +5,4 @@ build:
   ci:
     - echo "printing env 123"
     - python app.py
+    - ls
