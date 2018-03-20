@@ -1,5 +1,4 @@
-FROM python:2.7-slim
-WORKDIR /app
-ADD . /app
-CMD ["python", "app.py"]
-
+FROM ubuntu:14.04
+COPY ./file.sh /
+ENTRYPOINT ["/file.sh"]
+CMD []
