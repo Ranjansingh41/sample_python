@@ -6,4 +6,4 @@ build:
     - echo "printing env 123"
     # python app.py
     - docker build -t test
-    -docker run
+    - docker run
