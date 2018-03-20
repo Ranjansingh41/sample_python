@@ -1,8 +1,8 @@
-num1 = input('Enter first number: ')
-num2 = input('Enter second number: ')
+#!/bin/bash
 
-# Add two numbers
-sum = float(num1) + float(num2)
+function add() {
+num=`expr $1 + $2`
+echo $num
+}
 
-# Display the sum
-print('The sum of {0} and {1} is {2}'.format(num1, num2, sum))
+$1 $2 $3
