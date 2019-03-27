@@ -1,0 +1,122 @@
+resources:
+   - name: sample_node_repo_test
+     type: gitRepo
+     integrationName: github-integration
+     repoPath: ankul-shippable/sample_node
+     configuration:
+        branches:
+           except: "*test"
+           only: "master*"
+        tags:
+           except: none
+           only: none   
+        buildOnCommit: true
+        buildOnPullRequest: false
+        buildOnPullRequestClose: false
+        buildOnRelease: true
+        buildOnTagPush: false
+        buildOnFileCommit: "*test2"
+        shallowDepth: 2
+        gitConfig: 
+          - dont_know
+          - dont_know_2
+     initialVersion:
+       sha: master
+
+pipelines:
+  - name: test_pipeline_1
+    steps:
+      - name: in_trigger_step
+        type: runSh
+        group: test_group
+        setup:
+          environmentVariables:
+            normal:
+              - ENV1: value1
+              - ENV2: value2
+            encrypted:
+              - SECURE_ENV1: test_value
+              - SECURE_ENV2: test_value
+          runtime: onHost
+        onExecute:
+          - echo "executing task command 1"
+          - echo "executing task command 2"
+
+      - name: in_trigger_step_2
+        type: runSh
+        group: test_group
+        setup:
+          environmentVariables:
+            normal:
+              - ENV1: value1
+              - ENV2: value2
+            encrypted:
+              - SECURE_ENV1: test_value
+              - SECURE_ENV2: test_value
+          runtime: onHost
+        onExecute:
+          - echo "executing task command 1"
+          - echo "executing task command 2" 
+
+      - name: main_step
+        type: runSh
+        group: test_group 
+        syntaxVersion: "2018-03-12"
+        priority: 9999
+        timeoutMinutes: 40
+        cache: true
+        setup:
+          environmentVariables:
+            normal:
+              - ENV1: value1
+              - ENV2: value2
+            encrypted:
+              - SECURE_ENV1: test_value
+              - SECURE_ENV2: test_value
+          runtime: onHost
+        dependsOn:
+          passive:
+            # steps:
+            #   - passive_step
+            integrations:
+              - github-integration
+          trigger:
+            resources:
+              - sample_node_repo_test
+            steps:
+              - in_trigger_step
+              - in_trigger_step_2
+        onStart:
+          - echo "Prepping build environment"
+        onExecute:
+          - echo "executing task command 1"
+          - echo "executing task command 2"
+        onSuccess:
+          - echo "Job well done!"
+        onFailure:
+          - echo "uh oh, something went wrong"
+        onComplete:
+          - echo "Cleaning up some stuff"
+        onCancel:
+          - echo "Someone cancelled the job"
+
+      - name: primary_step
+        type: runSh
+        group: test_group
+        setup:
+          environmentVariables:
+            normal:
+              - ENV1: value1
+              - ENV2: value2
+            encrypted:
+              - SECURE_ENV1: test_value
+              - SECURE_ENV2: test_value
+          runtime: onHost
+        dependsOn:
+          trigger:
+            steps:
+              - main_step
+              - in_trigger_step
+        onExecute:
+          - echo "executing task command 1"
+          - echo "executing task command 2"
